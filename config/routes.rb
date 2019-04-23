@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :vendors
+  devise_for :admins
   scope '/api' do
     devise_for :users, controllers: { registrations: 'registrations',
                                       sessions: 'sessions',
