@@ -31,3 +31,6 @@
 
 en:
   hello: "Hello world"
+  errors:
+    password: "should be of length between 8-16 and contain atleast one uppercase letter, one lowercase letter, one number and one special character."
+    phone: 'number is not valid.'
