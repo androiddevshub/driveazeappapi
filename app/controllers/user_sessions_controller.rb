@@ -1,10 +1,11 @@
-class SessionsController < Devise::SessionsController
+class UserSessionsController < Devise::SessionsController
 
   def create
     user = User.find_by_email(sign_in_params[:email])
     if user.present?
       if user.verified == "1"
         if user && user.valid_password?(sign_in_params[:password]) &&  sign_in(:user, user)
+          
           token = JsonWebToken.encode(user_id: user.id)
           if user.update(session_id: token)
             render json: { message: 'Signed in successfully',user: user.as_json(only: [:id, :name, :email, :phone, :session_id])}, status: :ok

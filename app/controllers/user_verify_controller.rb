@@ -1,4 +1,4 @@
-class VerifyController < ApplicationController
+class UserVerifyController < ApplicationController
 
   def verify_user
     user = User.find_by_email(params[:email])

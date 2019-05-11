@@ -5,7 +5,7 @@ class ApplicationController < ActionController::API
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :phone])
   end
 
-  def authorize_request
+  def authorize_user
     header = request.headers['session-id']
     header = header.split(' ').last if header
     if !header.present?
@@ -26,7 +26,31 @@ class ApplicationController < ActionController::API
         render json: { errors: 'Unauthorized user' }, status: :unauthorized
       end
     end
-
   end
+
+  def authorize_admin
+    header = request.headers['session-id']
+    header = header.split(' ').last if header
+    if !header.present?
+      render json: { errors: 'Unauthorized user' }, status: :unauthorized
+    else
+      if Admin.find_by(session_id: header)
+        begin
+          @decoded = JsonWebToken.decode(header)
+          @current_admin = Admin.find(@decoded[:admin_id])
+        rescue ActiveRecord::RecordNotFound => e
+          render json: { errors: e.message }, status: :unauthorized
+        rescue JWT::DecodeError => e
+          render json: { errors: e.message }, status: :unauthorized
+        rescue JWT::VerificationError => e
+          render json: { errors: e.message }, status: :unauthorized
+        end
+      else
+        render json: { errors: 'Unauthorized user' }, status: :unauthorized
+      end
+    end
+  end
+
+
 
 end

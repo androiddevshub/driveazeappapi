@@ -1,4 +1,4 @@
-class DashboardsController < ApplicationController
+class UserDashboardsController < ApplicationController
 
   before_action :authorize_request
 

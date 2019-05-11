@@ -1,4 +1,4 @@
-class PasswordsController < Devise::PasswordsController
+class UserPasswordsController < Users::Devise::PasswordsController
 
   def create
     @user = User.find_by_email(params[:email])
